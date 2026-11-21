@@ -1,0 +1,799 @@
+:root {
+  font-family: "Aptos", "Trebuchet MS", system-ui, -apple-system, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --nexdesk-ink: #183b3a;
+  --nexdesk-accent: #d46a4c;
+  --nexdesk-accent-hover: #b9573d;
+  --nexdesk-paper: #f5f3ee;
+  --bs-primary: #d46a4c;
+  --bs-primary-rgb: 212, 106, 76;
+  --bs-link-color: #a94c38;
+  --bs-link-hover-color: #813b2d;
+  --bs-body-font-family: "Aptos", "Trebuchet MS", system-ui, sans-serif;
+}
+
+body { margin: 0; min-width: 320px; background: var(--nexdesk-paper); }
+#root { min-height: 100vh; }
+.nexdesk-logo {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: var(--nexdesk-accent);
+  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+}
+pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+
+/* Notificación de bienvenida NEXDESK */
+
+.nexdesk-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1100;
+  width: min(390px, calc(100vw - 32px));
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #198754;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.16);
+
+  opacity: 0;
+  transform: translateY(-18px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nexdesk-toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nexdesk-toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background: #e8f7ee;
+  color: #198754;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.nexdesk-toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: #198754;
+  transform-origin: left;
+  animation: nexdesk-progress 4.3s linear forwards;
+}
+
+@keyframes nexdesk-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (max-width: 576px) {
+  .nexdesk-toast {
+    top: 12px;
+    right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexdesk-toast,
+  .nexdesk-toast-progress {
+    transition: none;
+    animation: none;
+  }
+}
+
+
+/* =========================================
+   NEXDESK - LAB 26.4
+   Layout principal
+========================================= */
+
+.nexdesk-app {
+  min-height: 100vh;
+  background: var(--nexdesk-paper);
+}
+
+.nexdesk-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 260px;
+  background: #183b3a;
+  color: #fff;
+  z-index: 1040;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, width 0.25s ease;
+}
+
+.nexdesk-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.nexdesk-sidebar-brand strong {
+  display: block;
+  font-size: 19px;
+  letter-spacing: 0.4px;
+}
+
+.nexdesk-sidebar-brand small {
+  display: block;
+  color: #aab7cc;
+  font-size: 11px;
+}
+
+.nexdesk-brand-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--nexdesk-accent);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 23px;
+}
+
+.nexdesk-sidebar-label {
+  color: #8799b5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 28px 22px 12px;
+}
+
+.nexdesk-sidebar-nav {
+  padding: 0 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nexdesk-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  margin-bottom: 5px;
+  color: #b6c5dc;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nexdesk-nav-link:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+.nexdesk-nav-link.activo {
+  color: #fff;
+  background: var(--nexdesk-accent);
+  font-weight: 600;
+}
+
+.nexdesk-nav-icon {
+  width: 24px;
+  text-align: center;
+  font-size: 19px;
+}
+
+.nexdesk-sidebar-footer {
+  padding: 22px;
+  color: #c6d3e5;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 12px;
+}
+
+.nexdesk-sidebar-footer small {
+  display: block;
+  color: #8194b1;
+  margin-top: 4px;
+}
+
+.nexdesk-online-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  margin-right: 7px;
+}
+
+.nexdesk-main {
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+.nexdesk-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  min-height: 86px;
+  background: #fff;
+  border-bottom: 1px solid #e9edf4;
+  padding: 14px clamp(18px, 3vw, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nexdesk-content {
+  padding: 34px clamp(18px, 3vw, 42px);
+}
+
+.nexdesk-page-heading {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.nexdesk-page-eyebrow {
+  color: #a94c38;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+
+.nexdesk-page-title {
+  color: #183b3a;
+  font-size: 1.22rem;
+  letter-spacing: -0.02em;
+}
+
+.nexdesk-page-subtitle {
+  color: #687478;
+  font-size: 0.84rem;
+  margin-top: 3px;
+}
+
+.nexdesk-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f9e8df;
+  color: #a94c38;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.nexdesk-menu-toggle {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border: 1px solid #e1e6e5;
+  color: #183b3a;
+}
+
+.nexdesk-menu-icon-mobile {
+  display: none;
+}
+
+.nexdesk-overlay {
+  display: none;
+}
+
+.nexdesk-module-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nexdesk-module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.1) !important;
+}
+
+.nexdesk-module-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: #f9e8df;
+  color: #a94c38;
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+}
+
+@media (max-width: 991px) {
+  .nexdesk-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .nexdesk-sidebar.abierto {
+    transform: translateX(0);
+  }
+
+  .nexdesk-main {
+    margin-left: 0;
+  }
+
+  .nexdesk-menu-icon-mobile {
+    display: inline;
+  }
+
+  .nexdesk-menu-icon-desktop {
+    display: none;
+  }
+
+  .nexdesk-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    border: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1035;
+  }
+
+  .nexdesk-content {
+    padding: 20px 12px;
+  }
+}
+
+@media (min-width: 992px) {
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar {
+    width: 82px;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-main {
+    margin-left: 82px;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-brand {
+    justify-content: center;
+    padding-inline: 10px;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-brand > div,
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-label,
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-footer small {
+    display: none;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-footer {
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-footer .nexdesk-online-dot {
+    margin: 0;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-sidebar-nav {
+    padding-inline: 10px;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-nav-link {
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .nexdesk-app[data-sidebar-collapsed="true"] .nexdesk-nav-link > span:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .nexdesk-topbar {
+    padding: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .nexdesk-topbar > div:last-child {
+    margin-left: auto;
+    gap: 0.45rem !important;
+  }
+
+  .nexdesk-page-eyebrow,
+  .nexdesk-page-subtitle,
+  .nexdesk-user-info {
+    display: none;
+  }
+
+  .nexdesk-page-title {
+    font-size: 1.02rem;
+  }
+
+  .nexdesk-topbar > div:first-child {
+    gap: 0.5rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexdesk-sidebar,
+  .nexdesk-module-card,
+  .nexdesk-nav-link {
+    transition: none;
+  }
+}
+
+
+/* LAB 26.4 - Flujo interactivo de tickets */
+
+.nexdesk-flujo-scroll {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e9edf5;
+  border-radius: 12px;
+  background: #f8faff;
+  padding: 8px;
+}
+
+.nexdesk-flujo-svg {
+  display: block;
+  width: 100%;
+  max-width: 850px;
+  min-width: 480px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.nexdesk-flujo-nodo {
+  cursor: pointer;
+  outline: none;
+}
+
+.nexdesk-flujo-nodo rect {
+  transition: fill 0.2s ease, stroke-width 0.2s ease;
+}
+
+.nexdesk-flujo-nodo:hover rect,
+.nexdesk-flujo-nodo:focus-visible rect {
+  stroke-width: 3;
+}
+
+.nexdesk-flujo-detalle {
+  border: 1px solid #e5eaf3;
+  border-left: 5px solid #2563eb;
+  border-radius: 12px;
+  padding: 20px;
+  background: #ffffff;
+}
+
+/* Modo nocturno NEXDESK */
+.nexdesk-app[data-bs-theme="dark"] {
+  --bs-body-bg: #0f172a;
+  --bs-body-color: #e2e8f0;
+  --bs-secondary-color: #a8b3c5;
+  --bs-border-color: #334155;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar {
+  color: #e2e8f0;
+  background: #111c30;
+  border-color: #334155;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .card,
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .modal-content,
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .dropdown-menu {
+  color: #e2e8f0;
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .table {
+  --bs-table-color: #e2e8f0;
+  --bs-table-bg: #1e293b;
+  --bs-table-border-color: #334155;
+  --bs-table-striped-bg: #263449;
+  --bs-table-striped-color: #e2e8f0;
+  --bs-table-hover-bg: #2a3a52;
+  --bs-table-hover-color: #ffffff;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .form-control,
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .form-select {
+  color: #e2e8f0;
+  background-color: #111c30;
+  border-color: #475569;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-content .form-control::placeholder {
+  color: #94a3b8;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-flujo-scroll,
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-flujo-detalle {
+  color: #e2e8f0;
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .btn-outline-secondary {
+  color: #dbeafe;
+  border-color: #64748b;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .btn-outline-secondary:hover {
+  color: #fff;
+  background: #334155;
+}
+
+.nexdesk-ticket-help {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: 24px;
+  z-index: 1025;
+}
+
+.nexdesk-ticket-help-button {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--nexdesk-accent);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.24);
+  font: inherit;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.nexdesk-ticket-help-button:hover {
+  background: var(--nexdesk-accent-hover);
+  transform: translateY(-2px);
+}
+
+.nexdesk-ticket-help-button:focus-visible {
+  outline: 3px solid #183b3a;
+  outline-offset: 3px;
+}
+
+.nexdesk-ticket-help-popover {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: min(420px, calc(100vw - 32px));
+  padding: 20px;
+  color: #183b3a;
+  background: #fff;
+  border: 1px solid #e4e9e8;
+  border-radius: 16px;
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.2);
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-ticket-help-popover {
+  color: #e2e8f0;
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-ticket-help-button:focus-visible {
+  outline-color: #e2e8f0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexdesk-ticket-help-button {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexdesk-flujo-nodo rect {
+    transition: none;
+  }
+}
+
+/* Identidad visual Nexdesk: tonos cálidos y verde petróleo */
+.btn-primary {
+  --bs-btn-bg: var(--nexdesk-accent);
+  --bs-btn-border-color: var(--nexdesk-accent);
+  --bs-btn-hover-bg: var(--nexdesk-accent-hover);
+  --bs-btn-hover-border-color: var(--nexdesk-accent-hover);
+  --bs-btn-active-bg: #a34a34;
+  --bs-btn-active-border-color: #a34a34;
+  --bs-btn-disabled-bg: var(--nexdesk-accent);
+  --bs-btn-disabled-border-color: var(--nexdesk-accent);
+}
+
+.text-primary { color: var(--nexdesk-accent) !important; }
+.bg-light { background-color: var(--nexdesk-paper) !important; }
+
+.nexdesk-app .card,
+.nexdesk-app .modal-content {
+  border-color: #e9e2d8;
+  box-shadow: 0 8px 24px rgba(24, 59, 58, 0.055);
+}
+
+.nexdesk-app .form-control,
+.nexdesk-app .form-select {
+  border-color: #d9d3c9;
+  border-radius: 0.65rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.nexdesk-app .form-control:focus,
+.nexdesk-app .form-select:focus {
+  border-color: #d9866d;
+  box-shadow: 0 0 0 0.22rem rgba(212, 106, 76, 0.16);
+}
+
+.nexdesk-app .btn,
+.nexdesk-logo,
+.nexdesk-brand-icon {
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.nexdesk-app .btn:hover:not(:disabled) { transform: translateY(-1px); }
+.nexdesk-sidebar-brand strong,
+.nexdesk-content h1,
+.nexdesk-content h2,
+.nexdesk-content h3 { letter-spacing: -0.025em; }
+
+.nexdesk-app[data-bs-theme="dark"] {
+  --bs-primary: #e58a6d;
+  --bs-primary-rgb: 229, 138, 109;
+  --bs-link-color: #efa48c;
+  --bs-link-hover-color: #ffd0bf;
+  --nexdesk-paper: #0f172a;
+}
+
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-sidebar { background: #102c2c; }
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-page-title,
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-menu-toggle { color: #e2e8f0; }
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-page-eyebrow { color: #efa48c; }
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-page-subtitle,
+.nexdesk-app[data-bs-theme="dark"] .text-secondary { color: #b8c5d6 !important; }
+.nexdesk-app[data-bs-theme="dark"] .text-dark { color: #e2e8f0 !important; }
+.nexdesk-app[data-bs-theme="dark"] .bg-light {
+  color: #e2e8f0 !important;
+  background-color: #1e293b !important;
+}
+.nexdesk-app[data-bs-theme="dark"] .alert-light {
+  color: #e2e8f0;
+  background-color: #1e293b;
+  border-color: #334155;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .btn-light {
+  color: #e2e8f0;
+  background-color: #1e293b;
+  border-color: #475569;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .btn-light:hover {
+  background-color: #334155;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .dropdown-menu,
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-notification-modal .modal-content {
+  color: #e2e8f0;
+  background-color: #1e293b;
+  border-color: #334155;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .dropdown-item {
+  color: #e2e8f0;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-topbar .dropdown-item:hover {
+  color: #fff;
+  background-color: #334155;
+}
+.nexdesk-app[data-bs-theme="dark"] .text-bg-light {
+  color: #e2e8f0 !important;
+  background-color: #334155 !important;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-notification-list .list-group-item {
+  color: #e2e8f0;
+  background-color: #1e293b;
+  border-color: #334155;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-notification-list .list-group-item:hover {
+  background-color: #263449;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-notification-list .nexdesk-notification-unread {
+  background-color: #263449;
+}
+.nexdesk-app[data-bs-theme="dark"] .nexdesk-nav-link.activo { background: #b9573d; }
+.nexdesk-app[data-bs-theme="dark"] .btn-primary {
+  --bs-btn-bg: #c9684e;
+  --bs-btn-border-color: #c9684e;
+  --bs-btn-hover-bg: #ad553d;
+  --bs-btn-hover-border-color: #ad553d;
+}
+
+.nexdesk-app[data-density="compact"] .nexdesk-content { padding: 18px 22px; }
+.nexdesk-app[data-density="compact"] .nexdesk-topbar { min-height: 64px; padding-block: 9px; }
+.nexdesk-app[data-density="compact"] .nexdesk-content .card-body { padding: 1rem !important; }
+.nexdesk-app[data-density="compact"] .nexdesk-content .table > :not(caption) > * > * { padding-block: 0.45rem; }
+.nexdesk-app[data-density="compact"] .nexdesk-content .mb-4 { margin-bottom: 1rem !important; }
+
+.nexdesk-notification-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+}
+
+.nexdesk-notification-modal {
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+}
+
+.nexdesk-notification-modal .modal-dialog {
+  width: min(100% - 1.5rem, 560px);
+}
+
+.nexdesk-notification-modal .modal-content {
+  max-height: min(80vh, 680px);
+}
+
+.nexdesk-notification-list {
+  max-height: min(45vh, 380px);
+  overflow-y: auto;
+}
+
+.nexdesk-notification-list .list-group-item {
+  padding: 14px 12px;
+  border-radius: 10px;
+}
+
+.nexdesk-notification-list .nexdesk-notification-unread {
+  background: #fff8f4;
+  border-color: #f0d7ca;
+}
+
+@media (max-width: 576px) {
+  .nexdesk-notification-modal .modal-dialog {
+    width: calc(100% - 1rem);
+    margin: 0.5rem auto;
+  }
+}
+
+.delta-wordmark {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.nexdesk-sidebar-brand strong.delta-wordmark {
+  font-size: 18px;
+  letter-spacing: 0.14em;
+}
+
+@media (max-width: 576px) {
+  .nexdesk-density-toggle,
+  .nexdesk-theme-toggle { padding-inline: 0.55rem; }
+  .nexdesk-app[data-density="compact"] .nexdesk-content { padding: 14px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexdesk-app .btn,
+  .nexdesk-logo,
+  .nexdesk-brand-icon,
+  .nexdesk-app .form-control,
+  .nexdesk-app .form-select { transition: none; }
+}
